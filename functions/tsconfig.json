@@ -6,10 +6,20 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017"
+    "target": "es2017",
+    "baseUrl": "./",
+    "paths": {
+        "@/*": [
+            "src/*"
+        ]
+    },
   },
   "compileOnSave": true,
   "include": [
-    "src"
-  ]
+    "src/**/*.ts"
+  ],
+  "typeRoots": [
+        "src/.config",
+        "node_modules/@types"
+    ]
 }
