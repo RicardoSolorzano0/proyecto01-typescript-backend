@@ -3,7 +3,7 @@ import type { ZodSchema } from 'zod';
 import type { MiddlewareType } from '@/types';
 import { validateBodyPayload, validateQueryPayload } from '@/utils';
 
-export const schemaMiddleware =  (
+const schemaMiddleware =  (
     req: Request,
     res: Response,
     next: NextFunction,

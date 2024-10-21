@@ -7,7 +7,7 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
         "@/*": [
             "src/*"
@@ -17,6 +17,9 @@
   "compileOnSave": true,
   "include": [
     "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ],
   "typeRoots": [
         "src/.config",

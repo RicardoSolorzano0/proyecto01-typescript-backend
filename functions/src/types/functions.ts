@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import type { HttpsFunction } from 'firebase-functions';
+import type { HttpsFunction } from 'firebase-functions/v2/https';
 import type { ZodSchema } from 'zod';
 
 export type HandlerType = (req: Request, res: Response) => Promise<void> | void;

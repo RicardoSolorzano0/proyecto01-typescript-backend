@@ -1,0 +1,1 @@
+export type GetUnionFromObjectKeys<T extends object> = T[keyof T];
