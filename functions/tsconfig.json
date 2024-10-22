@@ -1,28 +1,27 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "outDir": "lib",
-    "sourceMap": true,
-    "strict": true,
-    "target": "es2017",
-    "baseUrl": ".",
-    "paths": {
-        "@/*": [
-            "src/*"
-        ]
-    },
+      "baseUrl": ".",
+      "module": "CommonJS",
+      "noImplicitReturns": true,
+      "noUnusedLocals": true,
+      "outDir": "lib",
+      "paths": {
+          "@/*": [
+              "src/*"
+          ]
+      },
+      "sourceMap": true,
+      "strict": true,
+      "target": "es2017"
   },
-  "compileOnSave": true,
   "include": [
-    "src/**/*.ts"
+      "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+      "node_modules"
   ],
   "typeRoots": [
-        "src/.config",
-        "node_modules/@types"
-    ]
+      "src/.config",
+      "node_modules/@types"
+  ]
 }
