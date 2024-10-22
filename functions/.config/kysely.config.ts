@@ -1,21 +1,13 @@
-import {
-	DummyDriver,
-	PostgresAdapter,
-	PostgresIntrospector,
-	PostgresQueryCompiler,
-} from 'kysely'
 import { defineConfig } from 'kysely-ctl'
 import {Pool} from 'pg'
 import dayjs from 'dayjs'
-
-
 
 export default defineConfig({
 	// replace me with a real dialect instance OR a dialect name + `dialectConfig` prop.
 	dialect: "pg",
 	dialectConfig:{
 		pool: new Pool({
-			database: 'base_pruebas',
+			database: 'base_prueba',
 			host: 'localhost',
 			user: 'ricardosolorzano',
 			port: 5432,
