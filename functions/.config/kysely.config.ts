@@ -6,6 +6,7 @@ import {
 } from 'kysely'
 import { defineConfig } from 'kysely-ctl'
 import {Pool} from 'pg'
+import dayjs from 'dayjs'
 
 
 
@@ -14,18 +15,14 @@ export default defineConfig({
 	dialect: "pg",
 	dialectConfig:{
 		pool: new Pool({
-		  database: 'base_pruebas',
-		  host: 'localhost',
-		  user: 'ricardosolorzano',
-		  port: 5432,
-		  max: 10,
+			database: 'base_pruebas',
+			host: 'localhost',
+			user: 'ricardosolorzano',
+			port: 5432,
+			max: 10,
 		})
-	  }
-	//   migrations: {
-	//     migrationFolder: "migrations",
-	//   },
-	//   plugins: [],
-	//   seeds: {
-	//     seedFolder: "seeds",
-	//   }
+	},
+	migrations: {
+		getMigrationPrefix: () => `${ dayjs().format('YYYY_MM_DD') }_${ dayjs().unix() - dayjs().startOf('day').unix() }_`,
+	}
 })
