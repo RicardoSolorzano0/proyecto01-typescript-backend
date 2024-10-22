@@ -1,4 +1,4 @@
-import * as corsRequest        from 'cors';
+import corsRequest from 'cors';
 import type { MiddlewareType } from '@/types';
 
 
