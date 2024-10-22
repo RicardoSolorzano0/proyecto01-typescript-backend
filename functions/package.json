@@ -23,12 +23,14 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/pg": "^8.11.10",
     "@typescript-eslint/eslint-plugin": "^5.12.0",
     "@typescript-eslint/parser": "^5.12.0",
     "eslint": "^8.9.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.25.4",
     "firebase-functions-test": "^3.1.0",
+    "kysely-codegen": "^0.17.0",
     "kysely-ctl": "^0.9.0",
     "tsc-alias": "^1.8.10",
     "typescript": "^4.9.0"
