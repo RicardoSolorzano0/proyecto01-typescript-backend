@@ -12,11 +12,10 @@ const schema = z.object({
 const func =async (req: Request, res: Response) => {
     const { name, description, color } = req.payloadData as z.infer<typeof schema> 
 
-    const result = await db
+    const [result] = await db
         .insertInto('user_types')
         .values({ name, description, color }).returning('id')
-        .executeTakeFirst()
-
+        .execute()
 
     res.json({ result , ok:true });
 }
