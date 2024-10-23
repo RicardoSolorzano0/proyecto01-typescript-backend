@@ -4,7 +4,7 @@ import { type Kysely, sql } from 'kysely'
 export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable('users')
-        .addColumn('id', 'uuid', (col) => col.primaryKey())
+        .addColumn('id', 'uuid', (col) => col.defaultTo(sql`gen_random_uuid()`).primaryKey())
         .addColumn('name', 'text', (col) => col.notNull())
         .addColumn('last_name', 'text', (col) => col.notNull())
         .addColumn('birthdate', 'date', (col) => col.notNull())

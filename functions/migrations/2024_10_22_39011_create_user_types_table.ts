@@ -8,7 +8,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     // For more info, see: https://kysely.dev/docs/migrations
     await db.schema
         .createTable('user_types')
-        .addColumn('id', 'uuid', (col) => col.primaryKey())
+        .addColumn('id', 'uuid', (col) => col.defaultTo(sql`gen_random_uuid()`).primaryKey())
         .addColumn('name', 'text', (col) => col.notNull())
         .addColumn('description', 'text', (col) => col.notNull())
         .addColumn('color', 'char(7)', (col) => col.notNull())
