@@ -13,20 +13,20 @@ const func = async (req: Request, res: Response) => {
     const { id } = req.payloadData as z.infer<typeof schema>;
     
     try{
-        const [user] = await db.selectFrom('user_types')
+        const [typeUser] = await db.selectFrom('user_types')
             .select(['id', 'name'])
             .where('id', '=', id)
             .execute()
 
 
-        if(!user.id){
-            res.status(404).json({ ok: false, error: 'Usuario no encontrado' });
+        if(!typeUser.id){
+            res.status(404).json({ ok: false, error: 'Tipo de Usuario no encontrado' });
         }else{
             const { name, description, color } = req.payloadData as z.infer<typeof schema>;
             await db
                 .updateTable('user_types')
                 .set({ name, description, color, updated_at: new Date() })
-                .where('id', '=', user.id)
+                .where('id', '=', typeUser.id)
                 .execute()
 
 

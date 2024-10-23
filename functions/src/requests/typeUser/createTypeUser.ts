@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { db } from '../../db/database';
 
 const schema = z.object({
-   
     name: z.string(),
     description: z.string(),
     color: z.string(),
