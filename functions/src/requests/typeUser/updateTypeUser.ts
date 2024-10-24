@@ -1,39 +1,43 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
+import { RepeatedName } from './utils/RepeatedName';
 import { db } from '../../db/database';
 
 const schema = z.object({
-    id: z.string(),
+    id: z.string().uuid(),
     name: z.string().optional(),
     description: z.string().optional(),
-    color: z.string().optional(),
+    color: z.string().regex(/#[a-fA-F0-9]{6}/).optional(),
 });
 
 const func = async (req: Request, res: Response) => {
-    const { id } = req.payloadData as z.infer<typeof schema>;
+    const { id, name, description, color } = req.payloadData as z.infer<typeof schema>;
     
-    try{
-        const [typeUser] = await db.selectFrom('user_types')
-            .select(['id', 'name'])
+    if(name){
+        const repeatedName = await RepeatedName(name);
+
+        if(repeatedName){
+            res.status(400).json({ ok: false, error: 'El nombre ya existe' });
+            return;
+        }
+    }
+
+    const typeUser = await db.selectFrom('user_types')
+        .select(['id', 'name'])
+        .where('id', '=', id)
+        .execute()
+
+    if(typeUser.length === 0){
+        res.status(404).json({ ok: false, error: 'Tipo de Usuario no encontrado' });
+        return 
+    }else{
+        await db
+            .updateTable('user_types')
+            .set({ name, description, color, updated_at: new Date() })
             .where('id', '=', id)
             .execute()
 
-
-        if(!typeUser.id){
-            res.status(404).json({ ok: false, error: 'Tipo de Usuario no encontrado' });
-        }else{
-            const { name, description, color } = req.payloadData as z.infer<typeof schema>;
-            await db
-                .updateTable('user_types')
-                .set({ name, description, color, updated_at: new Date() })
-                .where('id', '=', typeUser.id)
-                .execute()
-
-
-            res.status(200).json({ ok: true, message: 'Se actualizo con exito' });
-        }
-    }catch(error){
-        res.status(500).json({ ok: false, error: 'El id es erroneo' });
+        res.status(200).json({ ok: true, message: 'Se actualizo con exito' });
     }
 }
 
