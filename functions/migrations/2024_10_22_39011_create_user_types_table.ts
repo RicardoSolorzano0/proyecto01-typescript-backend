@@ -9,7 +9,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable('user_types')
         .addColumn('id', 'uuid', (col) => col.defaultTo(sql`gen_random_uuid()`).primaryKey())
-        .addColumn('name', 'text', (col) => col.notNull())
+        .addColumn('name', 'text', (col) => col.notNull().unique())
         .addColumn('description', 'text', (col) => col.notNull())
         .addColumn('color', 'char(7)', (col) => col.notNull())
         .addColumn('created_at', 'timestamptz', (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`))
