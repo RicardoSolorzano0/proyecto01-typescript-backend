@@ -7,9 +7,5 @@ export const RepeatedName = async (name:string) : Promise<boolean> =>{
         .where('name', '=', name)
         .execute()
     
-    if(searchName.length>0) {
-        return true
-    }else{
-        return false
-    }
+    return searchName.length > 0;
 }
