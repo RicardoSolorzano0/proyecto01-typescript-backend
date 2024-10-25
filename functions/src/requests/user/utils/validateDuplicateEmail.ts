@@ -8,7 +8,7 @@ export const validateDuplicateEmail = async (email:string, id?:string) : Promise
         .execute()
 
     //si el id es diferente
-    if(id){
+    if( searchEmail.length>0 && id){
         return id!==searchEmail[0].id
     }
 

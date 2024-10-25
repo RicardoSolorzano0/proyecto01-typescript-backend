@@ -8,7 +8,7 @@ export const validateRepeatedName = async (name:string, id?:string) : Promise<bo
         .execute()
        
     //si el id el diferente 
-    if(id){
+    if(searchName.length > 0 && id){
         return id!==searchName[0].id
     }
     
