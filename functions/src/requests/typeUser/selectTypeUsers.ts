@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { z } from 'zod';
+import { z } from 'zod'
 import { db } from '@/db/database';
 
 const schema = z.object({
@@ -10,14 +10,14 @@ const schema = z.object({
 const func = async (req: Request, res: Response) => {
     const { option }  = req.payloadData as z.infer<typeof schema>
 
-    const user = await db
-        .selectFrom('users')
+    const typeUser = await db
+        .selectFrom('user_types')
         .selectAll()
         .$if(option === 'active', qb => qb.where('deleted_at', 'is', null))
         .$if(option === 'inactive', qb => qb.where('deleted_at', 'is not', null))
-        .execute()
+        .execute();
 
-    res.json({ user, ok: true })
+    res.json({ typeUser, ok: true });
 }
 
-export const selectUsers = { func, schema }
+export const selectTypeUsers = { func, schema }
