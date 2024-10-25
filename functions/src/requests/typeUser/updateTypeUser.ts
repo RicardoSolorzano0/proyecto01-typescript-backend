@@ -1,7 +1,8 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
-import { RepeatedName } from './utils/RepeatedName';
-import { db } from '../../db/database';
+import { db } from '@/db/database';
+import { existTypeUser } from './utils/existTypeUser';
+import { validateRepeatedName } from './utils/validateRepeatedName';
 
 const schema = z.object({
     id: z.string().uuid(),
@@ -14,7 +15,7 @@ const func = async (req: Request, res: Response) => {
     const { id, name, description, color } = req.payloadData as z.infer<typeof schema>;
     
     if(name){
-        const repeatedName = await RepeatedName(name);
+        const repeatedName = await validateRepeatedName(name, id);
 
         if(repeatedName){
             res.status(400).json({ ok: false, error: 'El nombre ya existe' });
@@ -22,23 +23,25 @@ const func = async (req: Request, res: Response) => {
         }
     }
 
-    const typeUser = await db.selectFrom('user_types')
-        .select(['id', 'name'])
+    const typeUser = await existTypeUser(id);
+
+    if(!typeUser) {
+        res.status(404).json({ ok: false, error: 'Tipo de Usuario no encontrado' });
+        return
+    } 
+
+    if(typeUser.deleted_at){
+        res.status(400).json({ ok: false, error: 'El tipo de usuario ya fue eliminado' });
+        return
+    }
+
+    await db
+        .updateTable('user_types')
+        .set({ name, description, color, updated_at: new Date() })
         .where('id', '=', id)
         .execute()
 
-    if(typeUser.length === 0){
-        res.status(404).json({ ok: false, error: 'Tipo de Usuario no encontrado' });
-        return 
-    }else{
-        await db
-            .updateTable('user_types')
-            .set({ name, description, color, updated_at: new Date() })
-            .where('id', '=', id)
-            .execute()
-
-        res.status(200).json({ ok: true, message: 'Se actualizo con exito' });
-    }
+    res.status(200).json({ ok: true, message: 'Se actualizo con exito' });
 }
 
 export const updateTypeUser = { func, schema }

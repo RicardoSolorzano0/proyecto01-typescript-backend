@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
-import { RepeatedName } from './utils/RepeatedName';
-import { db } from '../../db/database';
+import { db } from '@/db/database';
+import { validateRepeatedName } from './utils/validateRepeatedName';
 
 const schema = z.object({
     name: z.string(),
@@ -9,10 +9,10 @@ const schema = z.object({
     color: z.string().regex(/#[a-fA-F0-9]{6}/),
 });
 
-const func =async (req: Request, res: Response) => {
+const func = async (req: Request, res: Response) => {
     const { name, description, color } = req.payloadData as z.infer<typeof schema> 
 
-    const repeatedName = await RepeatedName(name);
+    const repeatedName = await validateRepeatedName(name);
 
     if (repeatedName) {
         res.status(400).json({ ok: false, error: 'El nombre ya existe' });
@@ -24,7 +24,7 @@ const func =async (req: Request, res: Response) => {
         .values({ name, description, color }).returning('id')
         .execute()
 
-    res.json({ result , ok:true });
+    res.json({ result , ok: true });
 }
 
 export const createTypeUser = { func, schema }
