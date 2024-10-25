@@ -7,11 +7,7 @@ export default defineConfig({
 	dialect: "pg",
 	dialectConfig:{
 		pool: new Pool({
-			database: 'base_prueba',
-			host: 'localhost',
-			user: 'ricardosolorzano',
-			port: 5432,
-			max: 10,
+			connectionString: process.env.DATABASE_URL
 		})
 	},
 	migrations: {
