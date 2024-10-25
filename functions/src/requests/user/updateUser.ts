@@ -1,7 +1,8 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
-import { DuplicateEmail } from './utils/DuplicateEmail';
-import { db } from '../../db/database';
+import { db } from '@/db/database';
+import { existUser } from './utils/existUser';
+import { validateDuplicateEmail } from './utils/validateDuplicateEmail';
 
 const schema = z.object({
     name:z.string().optional(),
@@ -19,7 +20,7 @@ const func = async (req: Request, res: Response) => {
     req.payloadData as z.infer<typeof schema> ;
 
     if(email){
-        const repeatEmail = await DuplicateEmail(email);
+        const repeatEmail = await validateDuplicateEmail(email,id);
 
         if(repeatEmail){
             res.status(400).json({ ok: false, error: 'El email ya existe' });
@@ -27,22 +28,24 @@ const func = async (req: Request, res: Response) => {
         }
     }
 
-    const user = await db.selectFrom('users')
-        .select(['id', 'name'])
-        .where('id', '=', id)
-        .execute();
+    const user = await existUser(id);
 
-    if(user.length === 0){
+    if(!user){
         res.status(404).json({ ok: false, error: 'Usuario no encontrado' });
         return;
-    }else{
-        await db
-            .updateTable('users')
-            .set({ name, last_name, birthdate, address, email, gender, user_type_id, updated_at: new Date() })
-            .where('id', '=', id)
-            .execute();
-        res.status(200).json({ ok: true, message: 'Se actualizo con exito' });
     }
+
+    if(user.deleted_at){
+        res.status(400).json({ ok: false, error: 'El usuario ya fue eliminado' });
+        return;
+    }
+    
+    await db
+        .updateTable('users')
+        .set({ name, last_name, birthdate, address, email, gender, user_type_id, updated_at: new Date() })
+        .where('id', '=', id)
+        .execute();
+    res.status(200).json({ ok: true, message: 'Se actualizo con exito' });
 }
 
-export const updateUsers = { func, schema }
+export const updateUser = { func, schema }

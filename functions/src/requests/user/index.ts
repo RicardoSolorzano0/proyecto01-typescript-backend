@@ -1,11 +1,11 @@
-import { createUsers } from './createUsers';
-import { deleteUsers } from './deleteUsers';
+import { createUser } from './createUser';
+import { deleteUser } from './deleteUser';
 import { selectUsers } from './selectUsers';
-import { updateUsers } from './updateUsers';
+import { updateUser } from './updateUser';
 
 export const userRoute = {
-    createUsers,
+    createUser,
     selectUsers,
-    updateUsers,
-    deleteUsers
+    updateUser,
+    deleteUser
 }

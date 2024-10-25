@@ -1,7 +1,7 @@
 import type { Request, Response }from 'express';
 import { z } from 'zod';
 import { db } from '@/db/database';
-import { DuplicateEmail } from './utils/DuplicateEmail';
+import { validateDuplicateEmail } from './utils/validateDuplicateEmail';
 
 const schema = z.object({
     name: z.string(),
@@ -17,7 +17,7 @@ const func = async (req: Request, res: Response) => {
     const { name, last_name, birthdate, address, email, gender, user_type_id } = 
     req.payloadData as z.infer<typeof schema>;
 
-    const repeatEmail = await DuplicateEmail(email);
+    const repeatEmail = await validateDuplicateEmail(email);
 
     if(repeatEmail){
         res.status(400).json({ ok: false, error: 'El email ya existe' });
@@ -51,4 +51,4 @@ const func = async (req: Request, res: Response) => {
     res.json({ result, ok: true });
 }
 
-export const createUsers = { func, schema }
+export const createUser = { func, schema }
