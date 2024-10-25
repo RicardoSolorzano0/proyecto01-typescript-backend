@@ -1,3 +1,3 @@
-export * from './testLocal/testLocalRoute';
-export * from './typeUser/typeUserRoute';
-export * from './user/userRoute';
+export { testLocalRoute } from './testLocal';
+export { typeUserRoute } from './typeUser';
+export { userRoute } from './user';
