@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
-import { db } from '@/db/database';
+import { constructDB } from '@/db/database';
 import { validateRepeatedName } from './utils/validateRepeatedName';
 
 const schema = z.object({
@@ -12,7 +12,9 @@ const schema = z.object({
 const func = async (req: Request, res: Response) => {
     const { name, description, color } = req.payloadData as z.infer<typeof schema> 
 
-    const repeatedName = await validateRepeatedName(name);
+    const db = constructDB();
+
+    const repeatedName = await validateRepeatedName(db,name);
 
     if (repeatedName) {
         res.status(400).json({ ok: false, error: 'El nombre ya existe' });

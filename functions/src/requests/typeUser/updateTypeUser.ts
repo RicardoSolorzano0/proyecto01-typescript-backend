@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
-import { db } from '@/db/database';
+import { constructDB } from '@/db/database';
 import { existTypeUser } from './utils/existTypeUser';
 import { validateRepeatedName } from './utils/validateRepeatedName';
 
@@ -14,8 +14,10 @@ const schema = z.object({
 const func = async (req: Request, res: Response) => {
     const { id, name, description, color } = req.payloadData as z.infer<typeof schema>;
     
+    const db = constructDB();
+
     if(name){
-        const repeatedName = await validateRepeatedName(name, id);
+        const repeatedName = await validateRepeatedName(db,name, id);
 
         if(repeatedName){
             res.status(400).json({ ok: false, error: 'El nombre ya existe' });
@@ -23,7 +25,7 @@ const func = async (req: Request, res: Response) => {
         }
     }
 
-    const typeUser = await existTypeUser(id);
+    const typeUser = await existTypeUser(db,id );
 
     if(!typeUser) {
         res.status(404).json({ ok: false, error: 'Tipo de Usuario no encontrado' });

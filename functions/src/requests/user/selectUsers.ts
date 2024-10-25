@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
-import { db } from '@/db/database';
+import { constructDB } from '@/db/database';
 
 const schema = z.object({
     option: z.enum(['all', 'active', 'inactive']),
@@ -9,6 +9,8 @@ const schema = z.object({
 
 const func = async (req: Request, res: Response) => {
     const { option }  = req.payloadData as z.infer<typeof schema>
+
+    const db = constructDB();
 
     const user = await db
         .selectFrom('users')

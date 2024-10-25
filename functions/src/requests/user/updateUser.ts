@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
-import { db } from '@/db/database';
+import { constructDB } from '@/db/database';
 import { existUser } from './utils/existUser';
 import { validateDuplicateEmail } from './utils/validateDuplicateEmail';
 
@@ -19,8 +19,10 @@ const func = async (req: Request, res: Response) => {
     const { name, last_name, birthdate, address, email, gender, user_type_id, id } = 
     req.payloadData as z.infer<typeof schema> ;
 
+    const db = constructDB();
+
     if(email){
-        const repeatEmail = await validateDuplicateEmail(email,id);
+        const repeatEmail = await validateDuplicateEmail(db,email,id);
 
         if(repeatEmail){
             res.status(400).json({ ok: false, error: 'El email ya existe' });
@@ -28,7 +30,7 @@ const func = async (req: Request, res: Response) => {
         }
     }
 
-    const user = await existUser(id);
+    const user = await existUser(db, id);
 
     if(!user){
         res.status(404).json({ ok: false, error: 'Usuario no encontrado' });

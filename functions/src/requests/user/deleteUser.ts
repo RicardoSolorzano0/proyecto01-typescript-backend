@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
-import { db } from '@/db/database';
+import { constructDB } from '@/db/database';
 import { softDelete } from '@/db/softDelete';
 import { existUser } from './utils/existUser';
 
@@ -11,7 +11,9 @@ const schema = z.object({
 const func = async (req: Request, res: Response) => {
     const { id } = req.payloadData as z.infer<typeof schema>;
 
-    const user = await existUser(id);
+    const db = constructDB();
+
+    const user = await existUser(db,id);
 
     if (!user) {
         res.status(404).json({ ok: false, error: 'Usuario no encontrado' });

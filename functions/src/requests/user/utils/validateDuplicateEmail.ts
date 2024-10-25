@@ -1,6 +1,7 @@
-import { db } from '@/db/database';
+import type { Kysely } from 'kysely';
+import type { DB } from 'kysely-codegen';
 
-export const validateDuplicateEmail = async (email:string, id?:string) : Promise<boolean> =>{
+export const validateDuplicateEmail = async (db:Kysely<DB>,email:string, id?:string) : Promise<boolean> =>{
     const searchEmail = await db
         .selectFrom('users')
         .select(['email','id'])

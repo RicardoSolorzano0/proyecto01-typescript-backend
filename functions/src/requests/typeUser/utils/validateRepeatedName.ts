@@ -1,6 +1,9 @@
-import { db } from '@/db/database'
+import type { Kysely } from 'kysely';
+import type { DB } from 'kysely-codegen';
 
-export const validateRepeatedName = async (name:string, id?:string) : Promise<boolean> =>{
+
+export const validateRepeatedName = async (db:Kysely<DB>,name:string, id?:string) : Promise<boolean> =>{
+   
     const searchName = await db
         .selectFrom('user_types')
         .select(['name', 'id'])
