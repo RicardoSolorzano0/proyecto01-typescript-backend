@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
 import { constructDB } from '@/db/database';
-import { existTypeUser } from './utils/existTypeUser';
+import { getExistingUserType } from './utils/getExistingUserType';
 import { validateRepeatedName } from './utils/validateRepeatedName';
 
 const schema = z.object({
@@ -25,7 +25,7 @@ const func = async (req: Request, res: Response) => {
         }
     }
 
-    const typeUser = await existTypeUser(db,id );
+    const typeUser = await getExistingUserType(db,id );
 
     if(!typeUser) {
         res.status(404).json({ ok: false, error: 'Tipo de Usuario no encontrado' });
