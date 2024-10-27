@@ -1,7 +1,7 @@
 import type { Kysely } from 'kysely';
 import type { DB } from 'kysely-codegen';
 
-export const existUser = async (db:Kysely<DB>,id: string) => {
+export const getExistingUser = async (db:Kysely<DB>,id: string) => {
     const user = await db.selectFrom('users')
         .select(['id', 'name', 'deleted_at'])
         .where('id', '=', id)

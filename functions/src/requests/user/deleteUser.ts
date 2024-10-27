@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import { z } from 'zod';
 import { constructDB } from '@/db/database';
 import { softDelete } from '@/db/softDelete';
-import { existUser } from './utils/existUser';
+import { getExistingUser } from './utils/getExistingUser';
 
 const schema = z.object({
     id: z.string().uuid(),
@@ -13,7 +13,7 @@ const func = async (req: Request, res: Response) => {
 
     const db = constructDB();
 
-    const user = await existUser(db,id);
+    const user = await getExistingUser(db,id);
 
     if (!user) {
         res.status(404).json({ ok: false, error: 'Usuario no encontrado' });

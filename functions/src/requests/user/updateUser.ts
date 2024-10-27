@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
 import { constructDB } from '@/db/database';
-import { existUser } from './utils/existUser';
+import { getExistingUser } from './utils/getExistingUser';
 import { validateDuplicateEmail } from './utils/validateDuplicateEmail';
 
 const schema = z.object({
@@ -30,7 +30,7 @@ const func = async (req: Request, res: Response) => {
         }
     }
 
-    const user = await existUser(db, id);
+    const user = await getExistingUser(db, id);
 
     if(!user){
         res.status(404).json({ ok: false, error: 'Usuario no encontrado' });
