@@ -46,4 +46,4 @@ const func = async (req: Request, res: Response) => {
     res.status(200).json({ ok: true, message: 'Se actualizo con exito' });
 }
 
-export const updateTypeUser = { func, schema }
+export const updateUserType = { func, schema }

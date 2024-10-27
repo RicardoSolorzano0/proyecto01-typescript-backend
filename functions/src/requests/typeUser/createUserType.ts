@@ -29,4 +29,4 @@ const func = async (req: Request, res: Response) => {
     res.json({ result , ok: true });
 }
 
-export const createTypeUser = { func, schema }
+export const createUserType = { func, schema }

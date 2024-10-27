@@ -1,11 +1,11 @@
-import { createTypeUser } from './createTypeUser';
-import { deleteTypeUser } from './deleteTypeUser';
-import { selectTypeUsers } from './selectTypeUsers';
-import { updateTypeUser } from './updateTypeUser';
+import { createUserType } from './createUserType';
+import { deleteUserType } from './deleteUserType';
+import { selectUserTypes } from './selectUserTypes';
+import { updateUserType } from './updateUseTyper';
 
 export const typeUserRoute ={
-    createTypeUser,
-    updateTypeUser,
-    deleteTypeUser,
-    selectTypeUsers
+    createUserType,
+    updateUserType,
+    deleteUserType,
+    selectUserTypes
 }

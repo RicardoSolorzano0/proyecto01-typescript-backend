@@ -22,4 +22,4 @@ const func = async (req: Request, res: Response) => {
     res.json({ typeUser, ok: true });
 }
 
-export const selectTypeUsers = { func, schema }
+export const selectUserTypes = { func, schema }

@@ -44,4 +44,4 @@ const func = async (req: Request, res: Response) => {
     res.status(200).json({ ok: true, message: 'Se elimino con exito' })
 }
 
-export const deleteTypeUser = { func, schema }
+export const deleteUserType = { func, schema }
