@@ -5,8 +5,10 @@ import { testLocalRoute, typeUserRoute, userRoute } from './index';
 
 
 export const apiFunctions : APIOutput= {
-    ...buildRequests([],{ secrets:DBSecretsArray },{
+    ...buildRequests([],{},{
         ...testLocalRoute,
+    }),
+    ...buildRequests([],{ secrets:DBSecretsArray },{
         ...userRoute,
         ...typeUserRoute
     })
