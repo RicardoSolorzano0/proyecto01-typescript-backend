@@ -23,7 +23,8 @@ const func = async (req: Request, res: Response) => {
             'users.address', 
             'users.email', 
             'users.gender', 
-            'user_types.name as user_type'
+            'user_types.name as user_type',
+            'users.user_type_id'
         ])
         .$if(option === 'active', qb => qb.where('deleted_at', 'is', null))
         .$if(option === 'inactive', qb => qb.where('deleted_at', 'is not', null))
