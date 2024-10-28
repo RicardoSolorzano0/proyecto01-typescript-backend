@@ -19,7 +19,7 @@ const func = async (req: Request, res: Response) => {
         .$if(option === 'inactive', qb => qb.where('deleted_at', 'is not', null))
         .execute();
 
-    res.json({ typeUser, ok: true });
+    res.json(typeUser);
 }
 
 export const selectUserTypes = { func, schema }
