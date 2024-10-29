@@ -36,7 +36,7 @@ const func = async (req: Request, res: Response) => {
         return
     }
 
-    const [result] = await db
+    await db
         .insertInto('users')
         .values({
             name,
@@ -50,7 +50,7 @@ const func = async (req: Request, res: Response) => {
         .returning('id')
         .execute();
 
-    res.json({ result, ok: true });
+    res.status(201).json();
 }
 
 export const createUser = { func, schema }

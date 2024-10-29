@@ -24,14 +24,15 @@ const func = async (req: Request, res: Response) => {
             'users.email', 
             'users.gender', 
             'user_types.name as user_type',
-            'users.user_type_id'
+            'users.user_type_id',
+            'users.created_at'
         ])
-        .$if(option === 'active', qb => qb.where('deleted_at', 'is', null))
-        .$if(option === 'inactive', qb => qb.where('deleted_at', 'is not', null))
-        .orderBy('created_at', 'asc')
+        .$if(option === 'active', qb => qb.where('users.deleted_at', 'is', null))
+        .$if(option === 'inactive', qb => qb.where('users.deleted_at', 'is not', null))
+        .orderBy('users.created_at', 'asc')
         .execute()
 
-    res.json({ user, ok: true })
+    res.json(user.length > 0 ? user : []);
 }
 
 export const selectUsers = { func, schema }

@@ -47,7 +47,8 @@ const func = async (req: Request, res: Response) => {
         .set({ name, last_name, birthdate, address, email, gender, user_type_id, updated_at: new Date() })
         .where('id', '=', id)
         .execute();
-    res.status(200).json({ ok: true, message: 'Se actualizo con exito' });
+        
+    res.status(200).json();
 }
 
 export const updateUser = { func, schema }
