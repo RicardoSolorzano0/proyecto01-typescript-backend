@@ -30,7 +30,6 @@ const schema = z.object({
 
 const func = (req: Request, res: Response) => {
     //toma el parametro de texto
-    console.log(req.payloadData, 'revisando todo el request');
     const original = req.payloadData as z.infer<typeof schema>;
 
     // Inserta el nuevo mensaje en Firestore usando el SDK de  de Firebase.
