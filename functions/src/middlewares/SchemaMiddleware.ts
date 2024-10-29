@@ -15,7 +15,7 @@ const schemaMiddleware =  (
     }
 
     const payload =
-    req.method === 'GET'
+    req.method === 'GET' || req.method === 'DELETE'
         ? validateQueryPayload(req, schema)
         : validateBodyPayload(req, schema);
 
