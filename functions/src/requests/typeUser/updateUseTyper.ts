@@ -43,7 +43,7 @@ const func = async (req: Request, res: Response) => {
         .where('id', '=', id)
         .execute()
 
-    res.status(200).json({ ok: true, message: 'Se actualizo con exito' });
+    res.status(200).json();
 }
 
 export const updateUserType = { func, schema }

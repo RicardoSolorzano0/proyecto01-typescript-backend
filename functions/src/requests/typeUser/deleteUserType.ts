@@ -41,7 +41,7 @@ const func = async (req: Request, res: Response) => {
         .returning(['id'])
         .execute();
    
-    res.status(200).json({ ok: true, message: 'Se elimino con exito' })
+    res.status(200).json()
 }
 
 export const deleteUserType = { func, schema }
