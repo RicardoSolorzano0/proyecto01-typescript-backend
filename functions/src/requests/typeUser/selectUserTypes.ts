@@ -17,6 +17,7 @@ const func = async (req: Request, res: Response) => {
         .selectAll()
         .$if(option === 'active', qb => qb.where('deleted_at', 'is', null))
         .$if(option === 'inactive', qb => qb.where('deleted_at', 'is not', null))
+        .orderBy('created_at', 'asc')
         .execute();
 
     res.json(typeUser);
