@@ -32,7 +32,22 @@ const func = async (req: Request, res: Response) => {
         .orderBy('users.created_at', 'asc')
         .execute()
 
-    res.json(user.length > 0 ? user : []);
+    const arr=user?.map(user => {
+        return {
+            id: user.id,
+            name: user.name,
+            last_name: user.last_name,
+            birthdate: user.birthdate.toISOString().split('T')[0],
+            address: user.address,
+            email: user.email,
+            gender: user.gender,
+            user_type: user.user_type,
+            user_type_id: user.user_type_id,
+            created_at: user.created_at
+        }
+    })
+
+    res.json(user.length > 0 ? arr : []);
 }
 
 export const selectUsers = { func, schema }
