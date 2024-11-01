@@ -1,7 +1,7 @@
 import { createUserType } from './createUserType';
 import { deleteUserType } from './deleteUserType';
+import { selectPaginatedUserTypes } from './selectPaginatedUserTypes';
 import { selectUserTypes } from './selectUserTypes';
-import { selectPaginatedUserTypes } from './selectUserTypesPaginate';
 import { updateUserType } from './updateUseTyper';
 
 export const typeUserRoute ={
@@ -9,5 +9,5 @@ export const typeUserRoute ={
     updateUserType,
     deleteUserType,
     selectUserTypes, 
-    selectUserTypesPaginate: selectPaginatedUserTypes
+    selectPaginatedUserTypes
 }

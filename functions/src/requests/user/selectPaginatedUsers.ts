@@ -35,4 +35,4 @@ const func = async (req: Request, res: Response) => {
     res.status(200).json({ data, page, perPage: limit, total: Number(totalCount) });
 }
 
-export const selectUsersPaginate = { func, schema }
+export const selectPaginatedUsers = { func, schema }
