@@ -6,11 +6,12 @@ const schema = z.object({
     option: z.enum(['all', 'active', 'inactive']),
     limit: z.coerce.number(),
     page: z.coerce.number(),
-    filter:z.string().optional()
+    filter:z.string().optional(),
+    userType: z.string().optional(),
 });
 
 const func = async (req: Request, res: Response) => {
-    const { option, limit, page,filter }  = req.payloadData as z.infer<typeof schema>
+    const { option, limit, page,filter,userType }  = req.payloadData as z.infer<typeof schema>
 
     const offset = (page-1) * limit;
 
@@ -20,6 +21,7 @@ const func = async (req: Request, res: Response) => {
         .selectFrom('users')
         .$if(option === 'active', (qb) => qb.where('deleted_at', 'is', null))
         .$if(option === 'inactive', (qb) => qb.where('deleted_at', 'is not', null))
+        .$if(userType !== '', (qb) => qb.where('user_type_id', '=', userType!))
         .$if(filter !== '', (qb) => qb.where((eb)=>eb.or([
             eb('users.name', 'ilike', `%${filter!}%`),
             eb('users.last_name', 'ilike', `%${filter!}%`),
