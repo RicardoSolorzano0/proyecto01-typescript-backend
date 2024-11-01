@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod'
 import { constructDB } from '@/db/database';
+import { Paginate } from '@/db/paginate';
 
 const schema = z.object({
     option: z.enum(['all', 'active', 'inactive']),
@@ -12,8 +13,6 @@ const schema = z.object({
 const func = async (req: Request, res: Response) => {
     const { option, limit, page, name }  = req.payloadData as z.infer<typeof schema>
 
-    const offset = (page-1) * limit;
-
     const db = constructDB();
 
     const baseQuery = db
@@ -22,22 +21,9 @@ const func = async (req: Request, res: Response) => {
         .$if(option === 'inactive', (qb) => qb.where('deleted_at', 'is not', null))
         .$if( name !== '', (qb) => qb.where('name', 'ilike', `%${name!}%`));
 
-    //haciendo consulta con paginacion
-    const data = await baseQuery
-        .orderBy('created_at', 'asc')
-        .selectAll()
-        .limit(limit)
-        .offset(offset)
-        .execute();
+    const { data, total } = await Paginate(baseQuery, limit, page, 'asc','created_at')
 
-    const { totalCount }  = await baseQuery
-        .select((eb) => eb.fn.countAll().as('totalCount'))
-        .executeTakeFirstOrThrow();
-
-    // SELECT count(name) FROM user_types
-    // SELECT count(*) FROM user_types
-
-    res.status(200).json({ data, page, perPage: limit, total: Number(totalCount) });
+    res.status(200).json({ data, page, perPage: limit, total });
 }
 
 export const selectPaginatedUserTypes = { func, schema }
