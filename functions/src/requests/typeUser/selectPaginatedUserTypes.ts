@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod'
 import { constructDB } from '@/db/database';
-import { Paginate } from '@/db/paginate';
+import { paginate } from '@/db/paginate';
 
 const schema = z.object({
     option: z.enum(['all', 'active', 'inactive']),
@@ -21,9 +21,9 @@ const func = async (req: Request, res: Response) => {
         .$if(option === 'inactive', (qb) => qb.where('deleted_at', 'is not', null))
         .$if( name !== '', (qb) => qb.where('name', 'ilike', `%${name!}%`));
 
-    const { data, total } = await Paginate(baseQuery, limit, page, 'asc','created_at')
+    const response = await paginate(baseQuery, limit, page,'created_at')
 
-    res.status(200).json({ data, page, perPage: limit, total });
+    res.status(200).json(response);
 }
 
 export const selectPaginatedUserTypes = { func, schema }

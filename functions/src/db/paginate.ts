@@ -1,12 +1,12 @@
 import type { ReferenceExpression, SelectQueryBuilder } from 'kysely'
 import type { DB } from 'kysely-codegen';
 
-export const Paginate = async <TableName extends keyof DB & string>(
+export const paginate = async <TableName extends keyof DB & string>(
     baseQuery: SelectQueryBuilder<DB, TableName, Partial<Omit<unknown, never>>>,
     limit: number,
     page: number,
-    direction: 'asc' | 'desc' = 'asc',
     orderBy: ReferenceExpression<DB, TableName>,
+    direction: 'asc' | 'desc' = 'asc'
 ) => {
 
     const offset = (page-1) * limit;
@@ -24,6 +24,8 @@ export const Paginate = async <TableName extends keyof DB & string>(
 
     return {
         data,
-        total: Number(totalCount)
+        page, 
+        perPage: limit,
+        total: Number(totalCount),
     }
 }

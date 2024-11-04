@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod'
 import { constructDB } from '@/db/database';
-import { Paginate } from '@/db/paginate';
+import { paginate } from '@/db/paginate';
 
 const schema = z.object({
     option: z.enum(['all', 'active', 'inactive']),
@@ -28,9 +28,18 @@ const func = async (req: Request, res: Response) => {
         ])));
     //haciendo consulta con paginacion
     
-    const { data, total } = await Paginate(baseQuery, limit, page, 'asc','users.created_at');
+    const response = await paginate(baseQuery, limit, page,'users.created_at');
 
-    res.status(200).json({ data, page, perPage: limit, total });
+    const { data } = response
+
+    const arr=data?.map(user => {
+        return {
+            ...user,
+            birthdate: user.birthdate.toISOString().split('T')[0],
+        }
+    })
+
+    res.status(200).json({ ...response, data: arr });
 }
 
 export const selectPaginatedUsers = { func, schema }
