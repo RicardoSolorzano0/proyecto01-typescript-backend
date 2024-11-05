@@ -22,7 +22,8 @@ const func = async (req: Request, res: Response) => {
     const repeatEmail = await validateDuplicateEmail(db,email);
 
     if(repeatEmail){
-        res.status(400).json({ ok: false, error: 'El email ya existe' });
+        //res.status(400).json({ ok: false, error: 'El email ya existe' });
+        res.status(400).json({ ok: false, error: 'EMAIL_ALREADY_EXISTS' });
         return
     }
 
