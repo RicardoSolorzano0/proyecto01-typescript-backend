@@ -16,12 +16,12 @@ const func = async (req: Request, res: Response) => {
     const user = await getExistingUser(db,id);
 
     if (!user) {
-        res.status(404).json({ ok: false, error: 'Usuario no encontrado' });
+        res.status(404).json({ ok: false, error: 'USER_NOT_FOUND' });
         return;
     }
 
     if (user.deleted_at) {
-        res.status(400).json({ ok: false, error: 'El usuario ya fue eliminado' });
+        res.status(400).json({ ok: false, error: 'USER_ALREADY_DELETED' });
         return;
     }
 

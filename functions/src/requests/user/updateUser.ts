@@ -25,8 +25,7 @@ const func = async (req: Request, res: Response) => {
         const repeatEmail = await validateDuplicateEmail(db,email,id);
 
         if(repeatEmail){
-            //res.status(400).json({ ok: false, error: 'El email ya existe' });
-            res.status(400).json({ ok: false, error: 'EMAIL_ALREADY_EXISTS' });
+            res.status(400).json({ ok: false, error: 'USER_ALREADY_EXISTS' });
             return;
         }
     }
@@ -34,12 +33,12 @@ const func = async (req: Request, res: Response) => {
     const user = await getExistingUser(db, id);
 
     if(!user){
-        res.status(404).json({ ok: false, error: 'Usuario no encontrado' });
+        res.status(404).json({ ok: false, error: 'USER_NOT_FOUND' });
         return;
     }
 
     if(user.deleted_at){
-        res.status(400).json({ ok: false, error: 'El usuario ya fue eliminado' });
+        res.status(400).json({ ok: false, error: 'USER_ALREADY_DELETED' });
         return;
     }
     

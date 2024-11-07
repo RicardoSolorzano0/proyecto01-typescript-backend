@@ -22,8 +22,7 @@ const func = async (req: Request, res: Response) => {
     const repeatEmail = await validateDuplicateEmail(db,email);
 
     if(repeatEmail){
-        //res.status(400).json({ ok: false, error: 'El email ya existe' });
-        res.status(400).json({ ok: false, error: 'EMAIL_ALREADY_EXISTS' });
+        res.status(400).json({ ok: false, error: 'USER_ALREADY_EXISTS' });
         return
     }
 
@@ -33,7 +32,7 @@ const func = async (req: Request, res: Response) => {
         .where('id', '=', user_type_id)
         .execute();
     if(searchUserType.length === 0){
-        res.status(400).json({ ok: false, error: 'El tipo de usuario no existe' });
+        res.status(400).json({ ok: false, error: 'USER_TYPE_NOT_FOUND' });
         return
     }
 
