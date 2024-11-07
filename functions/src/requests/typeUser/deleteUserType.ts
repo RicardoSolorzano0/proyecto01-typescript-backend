@@ -16,7 +16,8 @@ const func = async (req: Request, res: Response) => {
     const typeUser = await getExistingUserType(db,id)
 
     if (!typeUser) {
-        res.status(404).json({ ok: false, error: 'Tipo de Usuario no encontrado' })
+        res.status(404).json({ ok: false, error: 'USER_TYPE_NOT_FOUND' })
+        // res.status(404).json({ ok: false, error: 'Tipo de Usuario no encontrado' })
         return
     } 
 
@@ -27,12 +28,14 @@ const func = async (req: Request, res: Response) => {
         .execute()
 
     if(users.length > 0){
-        res.status(422).json({ ok: false, error: 'El tipo de usuario tiene usuarios asociados' })
+        res.status(422).json({ ok: false, error: 'USERS_ASSOCIATED' })
+        //res.status(422).json({ ok: false, error: 'El tipo de usuario tiene usuarios asociados' })
         return
     }
 
     if(typeUser.deleted_at){
-        res.status(400).json({ ok: false, error: 'El tipo de usuario ya fue eliminado' })
+        res.status(400).json({ ok: false, error: 'USER_TYPE_ALREADY_DELETED' })
+        //res.status(400).json({ ok: false, error: 'El tipo de usuario ya fue eliminado' })
         return
     }
 

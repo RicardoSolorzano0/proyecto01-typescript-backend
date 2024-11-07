@@ -17,7 +17,8 @@ const func = async (req: Request, res: Response) => {
     const repeatedName = await validateRepeatedName(db,name);
 
     if (repeatedName) {
-        res.status(400).json({ ok: false, error: 'El nombre ya existe' });
+        res.status(400).json({ ok: false, error: 'USER_TYPE_ALREADY_EXISTS' });
+        // res.status(400).json({ ok: false, error: 'El nombre ya existe' });
         return;
     }
 

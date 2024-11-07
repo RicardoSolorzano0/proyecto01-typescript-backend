@@ -20,7 +20,8 @@ const func = async (req: Request, res: Response) => {
         const repeatedName = await validateRepeatedName(db,name, id);
 
         if(repeatedName){
-            res.status(400).json({ ok: false, error: 'El nombre ya existe' });
+            res.status(400).json({ ok: false, error: 'USER_TYPE_ALREADY_EXISTS' });
+            //res.status(400).json({ ok: false, error: 'El nombre ya existe' });
             return;
         }
     }
@@ -28,12 +29,12 @@ const func = async (req: Request, res: Response) => {
     const typeUser = await getExistingUserType(db,id );
 
     if(!typeUser) {
-        res.status(404).json({ ok: false, error: 'Tipo de Usuario no encontrado' });
+        res.status(404).json({ ok: false, error: 'USER_TYPE_NOT_FOUND' });
         return
     } 
 
     if(typeUser.deleted_at){
-        res.status(400).json({ ok: false, error: 'El tipo de usuario ya fue eliminado' });
+        res.status(400).json({ ok: false, error: 'USER_TYPE_ALREADY_DELETED' });
         return
     }
 
