@@ -27,33 +27,35 @@ const func = async (req: Request, res: Response) => {
         res.status(200).json({ ok:true });
         return;
     }
-    else{
-        //agregaremos
+    //agregaremos
 
-        if(animalsAdd.length>0){
-            const favoritesAnimals = animalsAdd.map((animal) => ({ animal_id: animal, user_id }));
+    if(animalsAdd.length>0){
+        const favoritesAnimals = animalsAdd.map((animal) => ({ animal_id: animal, user_id }));
 
+        await db
+            .insertInto('animal_user')
+            .values(favoritesAnimals)
+            .execute()
+    }
+
+    //eliminaremos
+
+    if(animalsDelete.length>0){
+        for(const animal of animalsDelete){
             await db
-                .insertInto('animal_user')
-                .values(favoritesAnimals)
+                .deleteFrom('animal_user')
+                .where('animal_id', '=', animal.animal_id)
+                .where('user_id', '=', user_id)
                 .execute()
         }
-
-        //eliminaremos
-
-        if(animalsDelete.length>0){
-            for(const animal of animalsDelete){
-                await db
-                    .deleteFrom('animal_user')
-                    .where('animal_id', '=', animal.animal_id)
-                    .where('user_id', '=', user_id)
-                    .execute()
-            }
-        }
-
-        res.status(200).json({ animalsAdd, animalsDelete });
-        return
     }
+
+    // 200: ok
+    // 201: created
+    // 204: no content
+
+    res.status(200).json({ animalsAdd, animalsDelete });
+    return
 }
 
 export const createAnimalUser = { func, schema }
