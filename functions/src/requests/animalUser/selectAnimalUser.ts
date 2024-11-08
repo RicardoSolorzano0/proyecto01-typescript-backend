@@ -12,11 +12,12 @@ const func = async (req: Request, res: Response) => {
     const db = constructDB();
 
     const favoritesAnimals = await db.selectFrom('animal_user')
-        .selectAll()
+        .innerJoin('animals', 'animal_user.animal_id', 'animals.id')
+        .select(['animals.id', 'animals.name'])
         .where('user_id', '=', user_id)
         .execute();
 
-    res.status(200).json({ ok:true, data:favoritesAnimals });
+    res.status(200).json(favoritesAnimals.length > 0 ? favoritesAnimals : []);
 }
 
 export const selectAnimalUsers = { func, schema }
