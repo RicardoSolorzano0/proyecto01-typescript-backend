@@ -2,6 +2,7 @@ import { createUser } from './createUser';
 import { deleteUser } from './deleteUser';
 import { selectPaginatedUsers } from './selectPaginatedUsers';
 import { selectUsers } from './selectUsers';
+import { selectUsersWithJoin } from './selectUsersWithJoin';
 import { updateUser } from './updateUser';
 
 export const userRoute = {
@@ -9,5 +10,6 @@ export const userRoute = {
     selectUsers,
     updateUser,
     deleteUser,
-    selectPaginatedUsers
+    selectPaginatedUsers,
+    selectUsersWithJoin
 }
