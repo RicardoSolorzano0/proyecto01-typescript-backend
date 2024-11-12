@@ -1,4 +1,5 @@
 import type { Request, Response }from 'express';
+import { getAuth } from 'firebase-admin/auth';
 import { z } from 'zod';
 import { constructDB } from '@/db/database';
 import { validateDuplicateEmail } from './utils/validateDuplicateEmail';
@@ -36,21 +37,36 @@ const func = async (req: Request, res: Response) => {
         return
     }
 
-    await db
-        .insertInto('users')
-        .values({
-            name,
-            last_name,
-            birthdate,
-            address,
-            email,
-            gender,
-            user_type_id,
-        })
-        .returning('id')
-        .execute();
+    await db.transaction().execute(async (trx) => {
+        const userSave =await trx
+            .insertInto('users')
+            .values({
+                name,
+                last_name,
+                birthdate,
+                address,
+                email,
+                gender,
+                user_type_id,
+            })
+            .returning('id')
+            .execute();
 
-    res.status(201).json();
+        if(userSave.length>0){
+            await getAuth()
+                .createUser({ 
+                    uid: userSave[0].id,
+                    displayName: `${name} ${last_name}`,
+                    email, 
+                    password: '123456'
+                });
+            
+            res.status(201).json();
+            return 
+        }else{
+            res.status(400).json({ ok:false, error: 'USER_NOT_CREATED' });
+        }
+    });
 }
 
 export const createUser = { func, schema }

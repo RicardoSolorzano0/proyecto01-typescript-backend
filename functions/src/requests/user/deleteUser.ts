@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import { getAuth } from 'firebase-admin/auth';
 import { z } from 'zod';
 import { constructDB } from '@/db/database';
 import { softDelete } from '@/db/softDelete';
@@ -25,12 +26,16 @@ const func = async (req: Request, res: Response) => {
         return;
     }
 
-    await softDelete(db, 'users')
-        .where('id', '=', id)
-        .returning(['id'])
-        .execute();
+    await db.transaction().execute(async (trx) => {
+        await softDelete(trx, 'users')
+            .where('id', '=', id)
+            .returning(['id'])
+            .execute();
+    
+        await getAuth().updateUser(id, { disabled: true });
 
-    res.status(200).json();
+        res.status(200).json();
+    });
 }
 
 export const deleteUser = { func, schema };    
