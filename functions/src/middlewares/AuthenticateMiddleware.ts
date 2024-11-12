@@ -1,9 +1,9 @@
-// import type { NextFunction, Request, Response } from 'express';
-// import { getAuth }                              from 'firebase-admin/auth';
-// import { logger }                               from 'firebase-functions';
-// import type { MiddlewareType, RoleType }        from '@/types';
+import type { NextFunction, Request, Response } from 'express';
+import { getAuth }                              from 'firebase-admin/auth';
+import { logger }                               from 'firebase-functions';
+import type { MiddlewareType, RoleType }        from '@/types';
 
-/*
+
 export const authenticateMiddleware = async (
     req: Request,
     res: Response,
@@ -51,6 +51,6 @@ export const authenticateMiddleware = async (
 
 export const auth = (roles?: RoleType[] | RoleType): MiddlewareType => handler =>
     (req, res) => authenticateMiddleware(req, res, () => handler(req, res), roles);
-*/
+
 // Para setear claims:
 // https://firebase.google.com/docs/auth/admin/custom-claims#set_and_validate_custom_user_claims_via_the_admin_sdk
