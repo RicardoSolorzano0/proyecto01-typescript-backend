@@ -1,7 +1,7 @@
 module.exports = {
     env: {
         es6: true,
-        node: true,
+        node: true
     },
     extends: [
         'eslint:recommended',
@@ -10,7 +10,7 @@ module.exports = {
         'plugin:import/typescript',
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
-        'plugin:import/recommended',
+        'plugin:import/recommended'
     ],
     ignorePatterns: [
         '/lib/**/*', // Ignore built files.
@@ -19,11 +19,12 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     parserOptions: {
         project: ['./tsconfig.json', './tsconfig.dev.json'],
-        sourceType: 'module',
+        sourceType: 'module'
     },
     plugins: [
+        '@stylistic',
         '@typescript-eslint',
-        'import',
+        'import'
     ],
     root: true,
     rules: {
@@ -35,32 +36,32 @@ module.exports = {
             {
                 'argsIgnorePattern': '^_',
                 'varsIgnorePattern': '^_',
-                'caughtErrorsIgnorePattern': '^_',
-            },
+                'caughtErrorsIgnorePattern': '^_'
+            }
         ],
         'import/no-unresolved': 0,
         'import/order': [
             'error', {
                 'alphabetize': {
                     'order': 'asc',
-                    'caseInsensitive': true,
+                    'caseInsensitive': true
                 },
                 'groups': [
                     ['external', 'builtin'],
                     'internal',
                     ['sibling', 'parent'],
                     'index',
-                    'unknown',
+                    'unknown'
                 ],
                 'pathGroups': [
                     {
                         'group': 'internal',
                         'pattern': '@/**/*'
-                    },
+                    }
                 ],
                 'pathGroupsExcludedImportTypes': [],
-                'warnOnUnassignedImports': true,
-            },
+                'warnOnUnassignedImports': true
+            }
         ],
         'indent': ['error', 4],
         'max-len': ['warn', 120],
@@ -70,8 +71,57 @@ module.exports = {
             'error',
             {
                 'ignoreCase': true,
-                'ignoreDeclarationSort': true,
-            },
+                'ignoreDeclarationSort': true
+            }
         ],
-    },
+        '@stylistic/block-spacing': 'warn',
+        '@stylistic/brace-style': 'warn',
+        '@stylistic/comma-dangle': 'warn',
+        '@stylistic/comma-spacing': 'warn',
+        '@stylistic/function-call-spacing': 'warn',
+        '@stylistic/key-spacing': 'warn',
+        '@stylistic/keyword-spacing': 'warn',
+        '@stylistic/member-delimiter-style': [
+            'warn',
+            {
+                'multiline': {
+                    'delimiter': 'semi',
+                    'requireLast': true
+                },
+                'singleline': {
+                    'delimiter': 'semi',
+                    'requireLast': true
+                },
+                'multilineDetection': 'brackets'
+            }
+        ],
+        '@stylistic/object-curly-spacing': [
+            'warn',
+            'always'
+        ],
+        '@stylistic/quotes': [
+            'error',
+            'single',
+            {
+                'avoidEscape': true,
+                'allowTemplateLiterals': true
+            }
+        ],
+        '@stylistic/semi': 'warn',
+        '@stylistic/space-before-blocks': 'warn',
+        '@stylistic/space-infix-ops': 'warn',
+        '@stylistic/type-annotation-spacing': 'warn',
+        '@stylistic/no-extra-parens': [
+            'error',
+            'all',
+            {
+                'conditionalAssign': true,
+                'ignoreJSX': 'multi-line'
+            }
+        ],
+        '@stylistic/arrow-parens': [
+            'error',
+            'as-needed'
+        ]
+    }
 };
