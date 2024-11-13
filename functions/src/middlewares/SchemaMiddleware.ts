@@ -1,6 +1,9 @@
-import type { NextFunction, Request, Response } from 'express';
-import type { ZodSchema } from 'zod';
-import type { MiddlewareType } from '@/types';
+import type { NextFunction, Request, Response }      from 'express';
+import type { ZodSchema }                            from 'zod';
+import type { MiddlewareType }                       from '@/types';
+
+
+
 import { validateBodyPayload, validateQueryPayload } from '@/utils';
 
 const schemaMiddleware =  (
@@ -32,6 +35,6 @@ const schemaMiddleware =  (
 
 export const schemaValidator =
   (schema?: ZodSchema): MiddlewareType =>
-      (handler) =>
+      handler =>
           (req, res) =>
               schemaMiddleware(req, res, () => handler(req, res), schema);
