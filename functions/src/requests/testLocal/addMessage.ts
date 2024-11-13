@@ -1,12 +1,13 @@
 import type { Request, Response } from 'express';
-import { z } from 'zod';
+import { z }                      from 'zod';
+
 
 const schemaObjectBody = z.object({
     propiedad1: z.string(),
     propiedad2: z.string(),
-    propiedad3:z.number(),
-    propiedad4:z.boolean(),
-    propiedad5:z.array(z.string()),
+    propiedad3: z.number(),
+    propiedad4: z.boolean(),
+    propiedad5: z.array(z.string())
 });
 
 const addMessagePost =  (req: Request, res: Response) => {
@@ -19,9 +20,9 @@ const addMessagePost =  (req: Request, res: Response) => {
     // Enviar un mensaje de que hemos escrito correctamente el mensaje
 
     res.json({ result: 'ok', original });
-}
+};
 
-export const addMessagePostRequest = { func:addMessagePost,schema: schemaObjectBody }
+export const addMessagePostRequest = { func: addMessagePost, schema: schemaObjectBody };
 
 const schema = z.object({
     text: z.string(),
@@ -38,6 +39,6 @@ const func = (req: Request, res: Response) => {
     // Enviar un mensaje de que hemos escrito correctamente el mensaje
 
     res.json({ result: `Mensaje con id: ${ original.text } agregado.`, original });
-}
+};
 
-export const addMessage = { func, schema }
+export const addMessage = { func, schema };
