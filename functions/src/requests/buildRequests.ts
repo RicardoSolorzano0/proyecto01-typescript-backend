@@ -1,6 +1,9 @@
-import type { HttpsOptions } from 'firebase-functions/v2/https';
-import { onRequest } from 'firebase-functions/v2/https';
-import { schemaValidator } from '@/middlewares';
+import type { HttpsOptions }                        from 'firebase-functions/v2/https';
+import { onRequest }                                from 'firebase-functions/v2/https';
+import { schemaValidator }                          from '@/middlewares';
+
+
+
 import type { APIInput, APIOutput, MiddlewareType } from '@/types';
 
 export const buildRequests = (middlewares: MiddlewareType[], options: HttpsOptions, functions: APIInput) =>
@@ -13,5 +16,5 @@ export const buildRequests = (middlewares: MiddlewareType[], options: HttpsOptio
         return {
             ...prev,
             [key]: onRequest(options, funcWithMiddlewares)
-        }
+        };
     }, {});
