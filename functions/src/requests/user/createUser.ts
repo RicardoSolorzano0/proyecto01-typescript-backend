@@ -1,7 +1,10 @@
-import type { Request, Response }from 'express';
-import { getAuth } from 'firebase-admin/auth';
-import { z } from 'zod';
-import { constructDB } from '@/db/database';
+import type { Request, Response } from 'express';
+import { getAuth }                from 'firebase-admin/auth';
+import { z }                      from 'zod';
+import { constructDB }            from '@/db/database';
+
+
+
 import { validateDuplicateEmail } from './utils/validateDuplicateEmail';
 
 const schema = z.object({
@@ -11,7 +14,7 @@ const schema = z.object({
     address: z.string(),
     email: z.string().email(),
     gender: z.enum(['M', 'F']),
-    user_type_id: z.string().uuid(),
+    user_type_id: z.string().uuid()
 });
 
 const func = async (req: Request, res: Response) => {
@@ -20,11 +23,11 @@ const func = async (req: Request, res: Response) => {
 
     const db = constructDB();
 
-    const repeatEmail = await validateDuplicateEmail(db,email);
+    const repeatEmail = await validateDuplicateEmail(db, email);
 
-    if(repeatEmail){
+    if (repeatEmail) {
         res.status(400).json({ ok: false, error: 'USER_ALREADY_EXISTS' });
-        return
+        return;
     }
 
     const searchUserType = await db
@@ -32,13 +35,13 @@ const func = async (req: Request, res: Response) => {
         .select(['id'])
         .where('id', '=', user_type_id)
         .execute();
-    if(searchUserType.length === 0){
+    if (searchUserType.length === 0) {
         res.status(400).json({ ok: false, error: 'USER_TYPE_NOT_FOUND' });
-        return
+        return;
     }
 
-    await db.transaction().execute(async (trx) => {
-        const userSave =await trx
+    await db.transaction().execute(async trx => {
+        const userSave = await trx
             .insertInto('users')
             .values({
                 name,
@@ -47,12 +50,12 @@ const func = async (req: Request, res: Response) => {
                 address,
                 email,
                 gender,
-                user_type_id,
+                user_type_id
             })
             .returning('id')
             .execute();
 
-        if(userSave.length>0){
+        if (userSave.length > 0) {
             await getAuth()
                 .createUser({ 
                     uid: userSave[0].id,
@@ -62,11 +65,11 @@ const func = async (req: Request, res: Response) => {
                 });
             
             res.status(201).json();
-            return 
-        }else{
-            res.status(400).json({ ok:false, error: 'USER_NOT_CREATED' });
+            return; 
+        } else {
+            res.status(400).json({ ok: false, error: 'USER_NOT_CREATED' });
         }
     });
-}
+};
 
-export const createUser = { func, schema }
+export const createUser = { func, schema };

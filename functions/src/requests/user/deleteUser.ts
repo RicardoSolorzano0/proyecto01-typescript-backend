@@ -1,12 +1,17 @@
 import type { Request, Response } from 'express';
-import { getAuth } from 'firebase-admin/auth';
-import { z } from 'zod';
-import { constructDB } from '@/db/database';
-import { softDelete } from '@/db/softDelete';
-import { getExistingUser } from './utils/getExistingUser';
+import { getAuth }                from 'firebase-admin/auth';
+import { z }                      from 'zod';
+import { constructDB }            from '@/db/database';
+import { softDelete }             from '@/db/softDelete';
+import { getExistingUser }        from './utils/getExistingUser';
+
+
+
+
+
 
 const schema = z.object({
-    id: z.string().uuid(),
+    id: z.string().uuid()
 });
 
 const func = async (req: Request, res: Response) => {
@@ -14,7 +19,7 @@ const func = async (req: Request, res: Response) => {
 
     const db = constructDB();
 
-    const user = await getExistingUser(db,id);
+    const user = await getExistingUser(db, id);
 
     if (!user) {
         res.status(404).json({ ok: false, error: 'USER_NOT_FOUND' });
@@ -26,7 +31,7 @@ const func = async (req: Request, res: Response) => {
         return;
     }
 
-    await db.transaction().execute(async (trx) => {
+    await db.transaction().execute(async trx => {
         await softDelete(trx, 'users')
             .where('id', '=', id)
             .returning(['id'])
@@ -36,6 +41,6 @@ const func = async (req: Request, res: Response) => {
 
         res.status(200).json();
     });
-}
+};
 
 export const deleteUser = { func, schema };    

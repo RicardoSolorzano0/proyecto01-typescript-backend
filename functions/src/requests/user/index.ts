@@ -1,9 +1,14 @@
-import { createUser } from './createUser';
-import { deleteUser } from './deleteUser';
+import { createUser }           from './createUser';
+import { deleteUser }           from './deleteUser';
+
 import { selectPaginatedUsers } from './selectPaginatedUsers';
-import { selectUsers } from './selectUsers';
-import { selectUsersWithJoin } from './selectUsersWithJoin';
-import { updateUser } from './updateUser';
+import { selectUsers }          from './selectUsers';
+import { selectUsersWithJoin }  from './selectUsersWithJoin';
+import { updateUser }           from './updateUser';
+
+
+
+
 
 export const userRoute = {
     createUser,
@@ -12,4 +17,4 @@ export const userRoute = {
     deleteUser,
     selectPaginatedUsers,
     selectUsersWithJoin
-}
+};

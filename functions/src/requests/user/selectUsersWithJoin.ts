@@ -1,15 +1,18 @@
 import {  type Request, type Response } from 'express';
-import { jsonArrayFrom } from 'kysely/helpers/postgres'
-import { z } from 'zod';
-import { constructDB } from '@/db/database';
+import { jsonArrayFrom }                from 'kysely/helpers/postgres';
+import { z }                            from 'zod';
+import { constructDB }                  from '@/db/database';
+
+
+
 
 const schema = z.object({
-    option: z.enum(['all', 'active', 'inactive']),
+    option: z.enum(['all', 'active', 'inactive'])
 });
 
 
 const func = async (req: Request, res: Response) => {
-    const { option }  = req.payloadData as z.infer<typeof schema>
+    const { option }  = req.payloadData as z.infer<typeof schema>;
 
     const db = constructDB();
 
@@ -26,21 +29,21 @@ const func = async (req: Request, res: Response) => {
             'users.gender', 
             'user_types.name as user_type',
             'users.user_type_id',
-            'users.created_at',
+            'users.created_at'
         ])
         .$if(option === 'active', qb => qb.where('users.deleted_at', 'is', null))
         .$if(option === 'inactive', qb => qb.where('users.deleted_at', 'is not', null))
-        .select((eb)=>[
+        .select(eb=>[
             jsonArrayFrom(
-                eb.selectFrom('animal_user',)
+                eb.selectFrom('animal_user')
                     .innerJoin('animals', 'animals.id', 'animal_user.animal_id')    
                     .select(['animal_user.id as user_animal_id', 'animal_user.animal_id as id', 'animals.name as name'])
                     .whereRef('animal_user.user_id', '=', 'users.id')
                     .orderBy('animal_user.created_at', 'asc')
-            ).as('animals'),
+            ).as('animals')
         ])
         .orderBy('users.created_at', 'asc')
-        .execute()
+        .execute();
 
     // const arr=user?.map(user => {
     //     return {
@@ -58,6 +61,6 @@ const func = async (req: Request, res: Response) => {
     // })
 
     res.json(user);
-}
+};
 
-export const selectUsersWithJoin = { func, schema }
+export const selectUsersWithJoin = { func, schema };

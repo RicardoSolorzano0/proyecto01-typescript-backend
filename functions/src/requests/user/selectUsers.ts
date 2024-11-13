@@ -1,14 +1,16 @@
 import type { Request, Response } from 'express';
-import { z } from 'zod';
-import { constructDB } from '@/db/database';
+import { z }                      from 'zod';
+import { constructDB }            from '@/db/database';
+
+
 
 const schema = z.object({
-    option: z.enum(['all', 'active', 'inactive']),
+    option: z.enum(['all', 'active', 'inactive'])
 });
 
 
 const func = async (req: Request, res: Response) => {
-    const { option }  = req.payloadData as z.infer<typeof schema>
+    const { option }  = req.payloadData as z.infer<typeof schema>;
 
     const db = constructDB();
 
@@ -30,9 +32,9 @@ const func = async (req: Request, res: Response) => {
         .$if(option === 'active', qb => qb.where('users.deleted_at', 'is', null))
         .$if(option === 'inactive', qb => qb.where('users.deleted_at', 'is not', null))
         .orderBy('users.created_at', 'asc')
-        .execute()
+        .execute();
 
-    const arr=user?.map(user => {
+    const arr = user?.map(user => {
         return {
             id: user.id,
             name: user.name,
@@ -44,10 +46,10 @@ const func = async (req: Request, res: Response) => {
             user_type: user.user_type,
             user_type_id: user.user_type_id,
             created_at: user.created_at
-        }
-    })
+        };
+    });
 
     res.json(user.length > 0 ? arr : []);
-}
+};
 
-export const selectUsers = { func, schema }
+export const selectUsers = { func, schema };
