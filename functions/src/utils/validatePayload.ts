@@ -1,7 +1,8 @@
-import type { Request } from 'express';
+import type { Request }                      from 'express';
+
 import type { ZodFormattedError, ZodSchema } from 'zod';
 
-type SuccessType<Output> = { data: Output; success: true };
+type SuccessType<Output> = { data: Output; success: true; };
 type FailureType<Output> = {
   errors: ZodFormattedError<Output>;
   success: false;
