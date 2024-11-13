@@ -1,8 +1,12 @@
-import { createAnimal } from './createAnimal';
-import { deleteAnimal } from './deleteAnimal';
-import { selectAnimals } from './selectAnimals';
+import { createAnimal }           from './createAnimal';
+import { deleteAnimal }           from './deleteAnimal';
+import { selectAnimals }          from './selectAnimals';
+
 import { selectPaginatedAnimals } from './selectPaginatedAnimals';
-import { updateAnimal } from './updateAnimal';
+import { updateAnimal }           from './updateAnimal';
+
+
+
 
 export const animalsRoute = {
     createAnimal,
@@ -10,4 +14,4 @@ export const animalsRoute = {
     updateAnimal,
     deleteAnimal,
     selectPaginatedAnimals
-}
+};

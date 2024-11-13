@@ -1,11 +1,11 @@
 import type { Request, Response } from 'express';
-import { z } from 'zod';
-import { constructDB } from '@/db/database';
-import { softDelete } from '@/db/softDelete';
-import { getExistingAnimal } from './utils/getExistingAnimal';
+import { z }                      from 'zod';
+import { constructDB }            from '@/db/database';
+import { softDelete }             from '@/db/softDelete';
+import { getExistingAnimal }      from './utils/getExistingAnimal';
 
 const schema = z.object({
-    id: z.string().uuid(),
+    id: z.string().uuid()
 });
 
 const func = async (req: Request, res: Response) => {
@@ -15,13 +15,13 @@ const func = async (req: Request, res: Response) => {
 
     const animal = await getExistingAnimal(db, id);
 
-    if(!animal){
+    if (!animal) {
         res.status(404).json({ ok: false, error: 'ANIMAL_NOT_FOUND' });
         // res.status(404).json({ ok: false, error: 'Animal no encontrado' });
         return;
     }
 
-    if(animal.deleted_at){
+    if (animal.deleted_at) {
         res.status(400).json({ ok: false, error: 'ANIMAL_ALREADY_DELETED' });
         //res.status(400).json({ ok: false, error: 'El animal ya fue eliminado' });
         return;
@@ -33,6 +33,6 @@ const func = async (req: Request, res: Response) => {
         .execute();
 
     res.status(200).json();
-}
+};
 
 export const deleteAnimal = { func, schema };    
