@@ -1,5 +1,6 @@
-import type { ReferenceExpression, SelectQueryBuilder } from 'kysely'
-import type { DB } from 'kysely-codegen';
+import type { ReferenceExpression, SelectQueryBuilder } from 'kysely';
+import type { DB }                                      from 'kysely-codegen';
+
 
 export const paginate = async <TableName extends keyof DB & string>(
     baseQuery: SelectQueryBuilder<DB, TableName, Partial<Omit<unknown, never>>>,
@@ -9,7 +10,7 @@ export const paginate = async <TableName extends keyof DB & string>(
     direction: 'asc' | 'desc' = 'asc'
 ) => {
 
-    const offset = (page-1) * limit;
+    const offset = (page - 1) * limit;
    
     const data = await baseQuery
         .orderBy(orderBy, direction)
@@ -19,13 +20,13 @@ export const paginate = async <TableName extends keyof DB & string>(
         .execute();
     
     const { totalCount }  = await baseQuery
-        .select((eb) => eb.fn.countAll().as('totalCount'))
+        .select(eb => eb.fn.countAll().as('totalCount'))
         .executeTakeFirstOrThrow();
 
     return {
         data,
         page, 
         perPage: limit,
-        total: Number(totalCount),
-    }
-}
+        total: Number(totalCount)
+    };
+};
