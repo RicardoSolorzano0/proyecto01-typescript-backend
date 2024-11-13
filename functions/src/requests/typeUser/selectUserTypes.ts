@@ -1,14 +1,16 @@
 import type { Request, Response } from 'express';
-import { z } from 'zod'
-import { constructDB } from '@/db/database';
+import { z }                      from 'zod';
+import { constructDB }            from '@/db/database';
+
+
 
 const schema = z.object({
-    option: z.enum(['all', 'active', 'inactive']),
+    option: z.enum(['all', 'active', 'inactive'])
 });
 
 
 const func = async (req: Request, res: Response) => {
-    const { option }  = req.payloadData as z.infer<typeof schema>
+    const { option }  = req.payloadData as z.infer<typeof schema>;
 
     const db = constructDB();
 
@@ -21,6 +23,6 @@ const func = async (req: Request, res: Response) => {
         .execute();
 
     res.json(typeUser);
-}
+};
 
-export const selectUserTypes = { func, schema }
+export const selectUserTypes = { func, schema };

@@ -1,21 +1,22 @@
 import type { Kysely } from 'kysely';
-import type { DB } from 'kysely-codegen';
+import type { DB }     from 'kysely-codegen';
 
 
-export const getExistingUserType = async (db:Kysely<DB>,id: string,) => {
+
+export const getExistingUserType = async (db: Kysely<DB>, id: string) => {
     const typeUser = await db.selectFrom('user_types')
         .select(['id', 'name', 'deleted_at'])
         .where('id', '=', id)
-        .execute()
+        .execute();
 
-    if(typeUser.length > 0){
-        const { id, name, deleted_at } = typeUser[0]
+    if (typeUser.length > 0) {
+        const { id, name, deleted_at } = typeUser[0];
         return {
             id,
             name, 
             deleted_at
-        }
-    }else{
-        return null
+        };
+    } else {
+        return null;
     }
-}
+};

@@ -1,11 +1,15 @@
 import type { Request, Response  } from 'express';
-import { z } from 'zod';
-import { constructDB } from '@/db/database';
-import { softDelete } from '@/db/softDelete';
-import { getExistingUserType } from './utils/getExistingUserType';
+import { z }                       from 'zod';
+import { constructDB }             from '@/db/database';
+import { softDelete }              from '@/db/softDelete';
+import { getExistingUserType }     from './utils/getExistingUserType';
+
+
+
+
 
 const schema = z.object({
-    id: z.string().uuid(),
+    id: z.string().uuid()
 });
 
 const func = async (req: Request, res: Response) => {
@@ -13,30 +17,30 @@ const func = async (req: Request, res: Response) => {
 
     const db = constructDB();
 
-    const typeUser = await getExistingUserType(db,id)
+    const typeUser = await getExistingUserType(db, id);
 
     if (!typeUser) {
-        res.status(404).json({ ok: false, error: 'USER_TYPE_NOT_FOUND' })
+        res.status(404).json({ ok: false, error: 'USER_TYPE_NOT_FOUND' });
         // res.status(404).json({ ok: false, error: 'Tipo de Usuario no encontrado' })
-        return
+        return;
     } 
 
     const users = await db
         .selectFrom('users')
         .select(['id'])
         .where('user_type_id', '=', id)
-        .execute()
+        .execute();
 
-    if(users.length > 0){
-        res.status(422).json({ ok: false, error: 'USERS_ASSOCIATED' })
+    if (users.length > 0) {
+        res.status(422).json({ ok: false, error: 'USERS_ASSOCIATED' });
         //res.status(422).json({ ok: false, error: 'El tipo de usuario tiene usuarios asociados' })
-        return
+        return;
     }
 
-    if(typeUser.deleted_at){
-        res.status(400).json({ ok: false, error: 'USER_TYPE_ALREADY_DELETED' })
+    if (typeUser.deleted_at) {
+        res.status(400).json({ ok: false, error: 'USER_TYPE_ALREADY_DELETED' });
         //res.status(400).json({ ok: false, error: 'El tipo de usuario ya fue eliminado' })
-        return
+        return;
     }
 
     await softDelete(db, 'user_types')
@@ -44,7 +48,7 @@ const func = async (req: Request, res: Response) => {
         .returning(['id'])
         .execute();
    
-    res.status(200).json()
-}
+    res.status(200).json();
+};
 
-export const deleteUserType = { func, schema }
+export const deleteUserType = { func, schema };

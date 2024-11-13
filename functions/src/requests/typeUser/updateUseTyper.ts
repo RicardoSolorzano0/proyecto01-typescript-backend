@@ -1,14 +1,18 @@
 import type { Request, Response } from 'express';
-import { z } from 'zod';
-import { constructDB } from '@/db/database';
-import { getExistingUserType } from './utils/getExistingUserType';
-import { validateRepeatedName } from './utils/validateRepeatedName';
+import { z }                      from 'zod';
+import { constructDB }            from '@/db/database';
+import { getExistingUserType }    from './utils/getExistingUserType';
+import { validateRepeatedName }   from './utils/validateRepeatedName';
+
+
+
+
 
 const schema = z.object({
     id: z.string().uuid(),
     name: z.string().optional(),
     description: z.string().optional(),
-    color: z.string().regex(/#[a-fA-F0-9]{6}/).optional(),
+    color: z.string().regex(/#[a-fA-F0-9]{6}/).optional()
 });
 
 const func = async (req: Request, res: Response) => {
@@ -16,35 +20,35 @@ const func = async (req: Request, res: Response) => {
     
     const db = constructDB();
 
-    if(name){
-        const repeatedName = await validateRepeatedName(db,name, id);
+    if (name) {
+        const repeatedName = await validateRepeatedName(db, name, id);
 
-        if(repeatedName){
+        if (repeatedName) {
             res.status(400).json({ ok: false, error: 'USER_TYPE_ALREADY_EXISTS' });
             //res.status(400).json({ ok: false, error: 'El nombre ya existe' });
             return;
         }
     }
 
-    const typeUser = await getExistingUserType(db,id );
+    const typeUser = await getExistingUserType(db, id );
 
-    if(!typeUser) {
+    if (!typeUser) {
         res.status(404).json({ ok: false, error: 'USER_TYPE_NOT_FOUND' });
-        return
+        return;
     } 
 
-    if(typeUser.deleted_at){
+    if (typeUser.deleted_at) {
         res.status(400).json({ ok: false, error: 'USER_TYPE_ALREADY_DELETED' });
-        return
+        return;
     }
 
     await db
         .updateTable('user_types')
         .set({ name, description, color, updated_at: new Date() })
         .where('id', '=', id)
-        .execute()
+        .execute();
 
     res.status(200).json();
-}
+};
 
-export const updateUserType = { func, schema }
+export const updateUserType = { func, schema };
