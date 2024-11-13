@@ -1,13 +1,15 @@
-import type { Request, Response } from 'express'
-import { z } from 'zod'
-import { constructDB } from '@/db/database'
+import type { Request, Response } from 'express';
+import { z }                      from 'zod';
+import { constructDB }            from '@/db/database';
+
+
 
 const schema = z.object({
-    user_id: z.string().uuid(),
-})
+    user_id: z.string().uuid()
+});
 
 const func = async (req: Request, res: Response) => {
-    const { user_id }  = req.payloadData as z.infer<typeof schema>
+    const { user_id }  = req.payloadData as z.infer<typeof schema>;
 
     const db = constructDB();
 
@@ -18,6 +20,6 @@ const func = async (req: Request, res: Response) => {
         .execute();
 
     res.status(200).json(favoritesAnimals.length > 0 ? favoritesAnimals : []);
-}
+};
 
-export const selectAnimalUsers = { func, schema }
+export const selectAnimalUsers = { func, schema };

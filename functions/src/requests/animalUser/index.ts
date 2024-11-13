@@ -1,7 +1,8 @@
-import { createAnimalUser } from './createAnimalUser';
+import { createAnimalUser }  from './createAnimalUser';
+
 import { selectAnimalUsers } from './selectAnimalUser';
 
-export const animalUserRoute ={
+export const animalUserRoute = {
     createAnimalUser,
     selectAnimalUsers
-}
+};
